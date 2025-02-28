@@ -30,14 +30,33 @@ public class Solution {
   // [1, 2, 2, 3, 5, 6]
 
   // [1, 4, 7, 0, 0, 0], [3, 5, 8]
-  // [1, 3, 7, 4, 0, 0], [5, 8]
-  // [1, 3, 5, 4, 7, 0], [8]
-  // [1, 3, 5, ]
+  // [1, 4, 7, 0, 0, 8], [3, 5]
+  // [1, 4, 0, 0, 7, 8], [3, 5]
+  // [1, 4, 0, 5, 7, 8], [3]
+  // [1, 0, 4, 5, 7, 8], [3]
+  // [1, 3, 4, 5, 7, 8]
+
+  // [0], [1]
+  // [1]
   public void merge(int[] nums1, int m, int[] nums2, int n) {
-    int l = 0, r = m;
+    int i = m - 1, j = n - 1, k = m + n - 1;
 
-    while (l < (m + n)) {
+    while (i >= 0 && j >= 0) {
+      int v1 = nums1[i];
+      int v2 = nums2[j];
 
+      if (v1 <= v2) {
+        nums1[k--] = nums2[j--];
+      } else {
+        int temp = nums1[i];
+        nums1[i--] = nums1[k];
+        nums1[k--] = temp;
+      }
     }
+
+    while (j >= 0) {
+      nums1[k--] = nums2[j--];
+    }
+
   }
 }
