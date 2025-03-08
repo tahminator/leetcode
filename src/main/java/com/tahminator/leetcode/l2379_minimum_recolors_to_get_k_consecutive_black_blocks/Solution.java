@@ -8,18 +8,25 @@ class Solution {
   /**
    * [0, 1, 2, 3, 4], k = 3
    *        <     >
+   *
+   * "WBBWWBBWBW", k = 7
+   *  <     >       c = 3, res = 3
+   *   <     >      c = 3+1-1, res = 3
+   *    <     >     c = 3, res = 3
+   *     <     >
    */
   public int minimumRecolors(String blocks, int k) {
-    int res = Integer.MAX_VALUE;
-    for (int i = 0; i <= blocks.length() - k; i++) {
-      int moves = 0;
-      for (int j = 0; j < k; j++) {
-        char c = blocks.charAt(i + j);
-        if (c != 'B') {
-          moves++;
-        }
+    int count = 0, res = Integer.MAX_VALUE;
+    int l = 0, r = 0;
+
+    while (r < blocks.length()) {
+      if (blocks.charAt(r) == 'W') count++;
+      if (r - l + 1 == k) {
+        res = Math.min(res, count);
+        if (blocks.charAt(l) == 'W') count--;
+        l++;
       }
-      res = Math.min(res, moves);
+      r++;
     }
 
     return res;
