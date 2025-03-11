@@ -10,13 +10,8 @@ class Solution {
       int prereq = edge[1];
 
       int c = courseToCounter.computeIfAbsent(course, k -> 0);
-      courseToCounter.put(course, c++);
+      courseToCounter.put(course, ++c);
       prereqToCourse.computeIfAbsent(prereq, k -> new ArrayList<>()).add(course);
-    }
-
-    for (var kv : prereqToCourse.entrySet()) {
-      System.out.println("k: " + kv.getKey());
-      System.out.println("v: " + kv.getValue());
     }
 
     List<Integer> res = new ArrayList<>();
@@ -30,16 +25,12 @@ class Solution {
     while (!q.isEmpty()) {
       int course = q.poll();
 
-      // if (seen.contains(v)) {
-      //   return false;
-      // }
-
       res.add(course);
       List<Integer> children = prereqToCourse.get(course);
+      if (children == null) continue;
       for (int child : children) {
         int count = courseToCounter.get(child);
-        count--;
-        courseToCounter.put(child, count);
+        courseToCounter.put(child, --count);
         if (count == 0) {
           q.offer(child);
         }
