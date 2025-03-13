@@ -6,52 +6,31 @@ class Node:
         self.neighbors = neighbors if neighbors is not None else []
 """
 
-
+"""
+The question is a little misleading because it doesn't give you an edge list, but rather
+the entry node itself.
+"""
 # This problem blows. The description is terrible.
 from typing import Optional
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
-        int n = max(node)
-        nodeToParent = {}
-        nodeToChild = {}
+        # Seen will hold the value of the node as the key, and the value will be the node itself.
+        seen = {}
 
+        return self.copy(seen, node)
+
+
+    def copy(self, seen, node):
         if not node:
-            return None
+            return Node()
 
-        cur = node
-        while cur:
-            neighbors = cur.neighbors
+        if node.val in seen:
+            return seen.get(node.val)
 
-            for neighbor in neighbors:
-                c = nodeToParent.get(neighbor.val, 0)
-                c += 1
-                nodeToParent[neighbor.val] = c
+        new_node = Node(node.val)
+        seen[node.val] = node
+        for neighbor in node.neighbors:
+            new_node.neighbors.append(self.copy(seen, neighbor))
 
-                children = nodeToChild.get(cur.val, [])
-                children.append(neighbor)
-                nodeToChild[cur.val] = neighbor
-
-
-        res = dummy = Node()
-
-        q = deque([(node, res)])
-
-        while q:
-            cur, pointer = q.popleft()
-
-            pointer.neighbors = pointer.neighbors + [Node(cur.val)]
-
-            children = cur.neighbors
-
-            for child in children:
-                nodeToParent.get(child.val, 1)
-                c -= 1
-                nodeToParent[child.val] = c
-
-                if c == 0:
-                    pointer.neighbors.append(Node(child.val))
-                    i = pointer.neighbors.find(child.val)
-                    q.append(child, pointer.neighbors[i])
-
-        return dummy.next
+        return new_node
 
