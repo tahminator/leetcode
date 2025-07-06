@@ -2,19 +2,18 @@ from typing import List
 
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        res = [float("inf")]
-        self.backtrack(coins, 0, 0, amount, res)
-        return res[0] if res[0] != float("inf") else -1
+        dp = [float("inf") for _ in range(amount + 1)]
 
-    def backtrack(self, coins, currAmount, currCoins, amount, res):
-        if currAmount > amount:
-            return
+        dp[0] = 0
 
-        if currAmount == amount:
-            res[0] = min(res[0], currCoins)
-            return
+        for i in range(1, len(dp)):
+            for coin in coins:
+                if coin > i:
+                    continue
 
-        for coin in coins:
-            self.backtrack(coins, currAmount + coin, currCoins + 1, amount, res)
+                dp[i] = min(dp[i], dp[i - coin] + 1)
 
-# print(Solution().coinChange([1,2,5], 11))
+        return dp[amount] if dp[amount] != float("inf") else -1
+
+
+print(Solution().coinChange([1,2,5], 11))
