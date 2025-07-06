@@ -52,25 +52,20 @@ class FindSumPairs:
         self.nums2 = nums2
         self.c = {}
 
-        for i in range(len(nums2)):
-            v = nums2[i]
-            if v in self.c:
-                self.c[v].add(i)
-            else:
-                self.c[v] = set([i])
+        for v in nums2:
+            self.c[v] = self.c.get(v, 0) + 1
 
 
     def add(self, index: int, val: int) -> None:
-        for key in self.c:
-            if index in self.c[key]:
-                nv = key + val
-                self.c[key].remove(index)
-                if nv in self.c:
-                    self.c[nv].add(index)
-                else:
-                    self.c[nv] = set([index])
-
-                return
+        ov = self.nums2[index]
+        self.nums2[index] += val
+        if ov in self.c:
+            nv = ov + val
+            self.c[ov] -= 1
+            if self.c[ov] == 0:
+                del self.c[ov]
+            self.c[nv] = self.c.get(nv, 0) + 1
+            return
 
 
 
@@ -83,7 +78,7 @@ class FindSumPairs:
             v1 = nums1[i]
             diff = tot - v1
             if diff in c:
-                count += len(c[diff])
+                count += c[diff]
 
         return count
 
@@ -91,7 +86,7 @@ class FindSumPairs:
 # fsp = FindSumPairs([8, 9, 14, 2], [1,3,5,5,5,5,7])
 # fsp.add(5, 2)
 
-# fsp = FindSumPairs([1, 1, 2, 2, 2, 3], [1, 4, 5, 2, 5, 4])
-# print(fsp.count(7))
+fsp = FindSumPairs([1, 1, 2, 2, 2, 3], [1, 4, 5, 2, 5, 4])
+print(fsp.count(7))
 
 
