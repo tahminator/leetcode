@@ -37,7 +37,7 @@ class DisjointSet {
         parent[pv] = pu;
       } else {
         parent[pv] = pu;
-        rank[rv]++;
+        rank[pu]++;
       }
     }
 };
